@@ -209,6 +209,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     flex: 1,
+    backgroundColor: '#eee',
   },
   resultLabel: {
     fontSize: 18,
