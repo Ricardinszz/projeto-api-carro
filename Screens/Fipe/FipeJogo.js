@@ -97,8 +97,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    width: '60%',
-    marginVertical: 10,
+    marginVertical: 5,
+    margin: 5, 
+    width: 500, 
+    height: 40,
   },
   feedback: {
     fontSize: 16,
