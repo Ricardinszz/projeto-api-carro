@@ -1,8 +1,9 @@
 import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
-import { View, Text, TextInput, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TextInput, ScrollView, StyleSheet, ImageBackground, Dimensions } from 'react-native';
 import { Button, Card } from 'react-native-paper';
 
+const { width, height } = Dimensions.get('window');
 
 const Ipva = () => {
   const [valorFipe, setValorFipe] = useState('');
@@ -30,55 +31,85 @@ const Ipva = () => {
   };
 
   return (
-    <ScrollView>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={styles.title}>IPVA</Text>
-        <Card style={{ backgroundColor: '#eee' }}>
-          <Card.Content>
-            <Text style={styles.label}>Informe o valor da FIPE:</Text>
-            <TextInput
-              style={{ margin: 5 }}
-              mode='outlined'
-              placeholder="Valor"
-              keyboardType="decimal-pad"
-              onChangeText={(text) => setValorFipe(text)}
-            />
+    <View style={styles.container}>
+      <ImageBackground source={require("../../imagens/sem-logo.jpg")} style={styles.imageBackground}>
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+          <Text style={styles.title}>IPVA</Text>
+          <View style={styles.cardContainer}>
+            <Card style={styles.card}>
+              <Card.Content>
+                <Text style={styles.label}>Informe o valor da FIPE:</Text>
+                <TextInput
+                  style={styles.input}
+                  mode='outlined'
+                  placeholder="Valor"
+                  keyboardType="decimal-pad"
+                  onChangeText={(text) => setValorFipe(text)}
+                />
 
-            <Text style={styles.label}>Selecione o tipo de veículo:</Text>
-            <Picker
-              selectedValue={tipoVeiculo}
-              onValueChange={(itemValue) => setTipoVeiculo(itemValue)}
-            >
-              <Picker.Item label="Carro" value="carro" />
-              <Picker.Item label="Moto" value="moto" />
-              <Picker.Item label="Caminhão" value="caminhao" />
-            </Picker>
+                <Text style={styles.label}>Selecione o tipo de veículo:</Text>
+                <Picker
+                  selectedValue={tipoVeiculo}
+                  onValueChange={(itemValue) => setTipoVeiculo(itemValue)}
+                >
+                  <Picker.Item label="Carro" value="carro" />
+                  <Picker.Item label="Moto" value="moto" />
+                  <Picker.Item label="Caminhão" value="caminhao" />
+                </Picker>
 
-            <Button mode="contained" style={{ marginVertical: 10 }} onPress={calcularIPVA}>
-              Calcular IPVA
-            </Button>
-            <Text>{resultadoIPVA}</Text>
+                <Button mode="contained" style={styles.button} onPress={calcularIPVA}>
+                  Calcular IPVA
+                </Button>
+                <Text>{resultadoIPVA}</Text>
 
-          </Card.Content>
-
-        </Card>
-      </View>
-    </ScrollView>
+              </Card.Content>
+            </Card>
+          </View>
+        </ScrollView>
+      </ImageBackground>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  imageBackground: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 20,
+    color: 'white',
+  },
+  cardContainer: {
+    width: '80%', 
+  },
+  card: {
+    backgroundColor: '#eee',
+    margin: 20, 
   },
   label: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginRight: 10,
-  }
+    marginVertical: 5,
+  },
+  input: {
+    marginVertical: 5,
+  },
+  button: {
+    marginVertical: 10,
+  },
 });
-export default Ipva;
 
+export default Ipva;

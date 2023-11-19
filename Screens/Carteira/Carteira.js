@@ -1,10 +1,103 @@
-import React from 'react'
-import { Text } from 'react-native-paper'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, View, ImageBackground, StyleSheet, Dimensions } from 'react-native';
+import { Avatar, Button, Card, Dialog, FAB, IconButton, Portal, Text } from 'react-native-paper';
 
-const Carteira = ({navigation}) => {
+const Carteira = ({ navigation, route }) => {
+  const [cadastros, setCadastros] = useState([]);
+  const [idExcluir, setIdExcluir] = useState(0);
+
+  const [visible, setVisible] = React.useState(false);
+  const showDialog = () => setVisible(true);
+  const hideDialog = () => setVisible(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      carregarDados();
+    }, [])
+  );
+
+  function carregarDados() {
+    AsyncStorage.getItem('cadastros').then(resultado => {
+      resultado = JSON.parse(resultado) || [];
+      setCadastros(resultado);
+    });
+  }
+
+  function confirmarExclusao(id) {
+    setIdExcluir(id);
+    setVisible(true);
+  }
+
+  function excluir() {
+    cadastros.splice(idExcluir, 1);
+    AsyncStorage.setItem('cadastros', JSON.stringify(cadastros));
+    carregarDados();
+    setVisible(false);
+  }
+
   return (
-    <Text>Carteira</Text>
-  )
-}
+    <View style={styles.container}>
+      <ImageBackground source={require("../../imagens/sem-logo.jpg")} style={styles.container}>
+        <ScrollView style={{ margin: 15, padding: 15 }}>
 
-export default Carteira
+        {cadastros.map((item, i) => (
+  <Card key={i} mode='outlined' style={{ marginBottom: 10 }}>
+    <Card.Content>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Avatar.Icon size={50} icon="account" />
+        <Text style={{ marginLeft: 10, fontWeight: 'bold', fontSize: 18 }}>{item.nome}</Text>
+      </View>
+      <Text>Data de Emissão: {item.emissao}</Text>
+      <Text>Data de Validade: {item.validade}</Text>
+      <Text>CPF: {item.cpf}</Text>
+      <Text>Data de Nascimento: {item.nascimento}</Text>
+    </Card.Content>
+    <Card.Actions>
+      <IconButton icon='pencil-outline' 
+      onPress={() => navigation.push('Carteira-Form', {id: i, cadastro: item})}
+      />
+      <IconButton icon='trash-can-outline'
+        onPress={() => confirmarExclusao(i)}
+      />
+    </Card.Actions>
+  </Card>
+))}
+
+          <Portal>
+            <Dialog visible={visible} onDismiss={hideDialog}>
+              <Dialog.Title>Atenção</Dialog.Title>
+              <Dialog.Content>
+                <Text>Deseja realmente excluir o registro?</Text>
+              </Dialog.Content>
+              <Dialog.Actions>
+                <Button onPress={excluir}>Sim</Button>
+                <Button onPress={hideDialog}>Não</Button>
+              </Dialog.Actions>
+            </Dialog>
+          </Portal>
+
+        </ScrollView>
+        {cadastros.length < 2 && (
+          <FAB
+            icon="plus"
+            size='small'
+            style={{ position: 'absolute', margin: 16, right: 0, bottom: 0 }}
+            onPress={() => navigation.push('Carteira-Form')}
+          />
+        )}
+      </ImageBackground>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+});
+
+export default Carteira;
