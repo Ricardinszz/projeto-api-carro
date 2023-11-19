@@ -6,6 +6,7 @@ import { ScrollView, View, Dimensions, ImageBackground, StyleSheet } from 'react
 import { Button, Text, TextInput } from 'react-native-paper'
 import { mask } from 'remask'
 import { Picker } from '@react-native-picker/picker'
+import carteiraValidator from '../../Validators/carteiraValidator'
 
 const CarteiraForm = ({ navigation, route }) => {
 
@@ -53,7 +54,7 @@ const CarteiraForm = ({ navigation, route }) => {
 
             <Formik
               initialValues={cadastro}
-            
+              validationSchema={carteiraValidator}
               onSubmit={values => salvar(values)}
             >
               {({ values, handleChange, handleSubmit, errors, touched, setFieldValue }) => (
@@ -65,7 +66,7 @@ const CarteiraForm = ({ navigation, route }) => {
                     value={values.cnh}
                     onChangeText={handleChange('cnh')}
                   />
-
+                  
                   {(errors.cnh && touched.cnh) &&
                     <Text style={{ color: 'red', marginTop: 5 }}>
                       {errors.cnh}
@@ -91,7 +92,7 @@ const CarteiraForm = ({ navigation, route }) => {
                     mode='outlined'
                     label='Número do RG'
                     value={values.rg}
-                    onChangeText={handleChange('rg')}
+                    onChangeText={(value) => { setFieldValue('rg', mask(value, '99.999.999-9')) }}
                   />
 
                   {(errors.rg && touched.rg) &&
@@ -105,7 +106,7 @@ const CarteiraForm = ({ navigation, route }) => {
                     mode='outlined'
                     label='Número do CPF'
                     value={values.cpf}
-                    onChangeText={handleChange('cpf')}
+                    onChangeText={(value) => { setFieldValue('cpf', mask(value, '999.999.999-99')) }}
                   />
 
                   {(errors.cpf && touched.cpf) &&
@@ -119,7 +120,7 @@ const CarteiraForm = ({ navigation, route }) => {
                     mode='outlined'
                     label='Data de nascimento'
                     value={values.nascimento}
-                    onChangeText={handleChange('nascimento')}
+                    onChangeText={(value) => { setFieldValue('nascimento', mask(value, '99/99/9999')) }}
                   />
 
                   {(errors.nascimento && touched.nascimento) &&
@@ -133,7 +134,7 @@ const CarteiraForm = ({ navigation, route }) => {
                     mode='outlined'
                     label='Data de emissão'
                     value={values.emissao}
-                    onChangeText={handleChange('emissao')}
+                    onChangeText={(value) => { setFieldValue('emissao', mask(value, '99/99/9999')) }}
                   />
 
                   {(errors.emissao && touched.emissao) &&
@@ -147,7 +148,7 @@ const CarteiraForm = ({ navigation, route }) => {
                     mode='outlined'
                     label='Data de validade'
                     value={values.validade}
-                    onChangeText={handleChange('validade')}
+                    onChangeText={(value) => { setFieldValue('validade', mask(value, '99/99/9999')) }}
                   />
 
                   {(errors.validade && touched.validade) &&
@@ -159,14 +160,18 @@ const CarteiraForm = ({ navigation, route }) => {
                   <TextInput
                     style={{ margin: 5, height: 50, fontSize: 20 }}
                     mode='outlined'
-                    label='Assinatura do titular'
-                    value={values.assinatura}
-                    onChangeText={handleChange('assinatura')}
+                    label='Categoria'
+                    value={values.categoria}
+                    onChangeText={(value) => {
+                      if (value.length <= 3) {
+                        setFieldValue('categoria', value)
+                      }
+                    }}                    
                   />
 
-                  {(errors.assinatura && touched.assinatura) &&
+                  {(errors.categoria && touched.categoria) &&
                     <Text style={{ color: 'red', marginTop: 5 }}>
-                      {errors.assinatura}
+                      {errors.categoria}
                     </Text>
                   }
 

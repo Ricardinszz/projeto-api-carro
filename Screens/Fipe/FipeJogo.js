@@ -36,7 +36,19 @@ const FipeJogo = () => {
   }, []);
 
   const checkAnswer = () => {
-    if (inputValue.toLowerCase() === marca.nome.toLowerCase()) {
+    const inputWords = inputValue.toLowerCase().split(' ');
+    const marcaWords = marca.nome.toLowerCase().split(' ');
+
+    let correctWords = 0;
+    for (let i = 0; i < inputWords.length; i++) {
+      if (marcaWords.includes(inputWords[i])) {
+        correctWords++;
+      }
+    }
+
+    const correctPercentage = (correctWords / marcaWords.length) * 100;
+
+    if (correctPercentage >= 80) {
       setFeedback('Parabéns! Você acertou a marca do carro.');
     } else {
       setFeedback(`Que pena! Você errou a marca do carro. A resposta certa é ${marca.nome}.`);

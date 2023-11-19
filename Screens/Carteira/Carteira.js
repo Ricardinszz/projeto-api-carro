@@ -43,16 +43,20 @@ const Carteira = ({ navigation, route }) => {
         <ScrollView style={{ margin: 15, padding: 15 }}>
 
         {cadastros.map((item, i) => (
-  <Card key={i} mode='outlined' style={{ marginBottom: 10 }}>
+  <Card key={i} mode='outlined' style={{ marginBottom: 10, backgroundColor: '#f0f0f0' }}>
     <Card.Content>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Avatar.Icon size={50} icon="account" />
-        <Text style={{ marginLeft: 10, fontWeight: 'bold', fontSize: 18 }}>{item.nome}</Text>
+        <Avatar.Icon size={45} icon="account" />
+        <View style={{ marginLeft: 10 }}>
+          <Text style={{ fontWeight: 'bold', fontSize: 18 }}>{item.nome}</Text>
+          <Text>CPF: {item.cpf}</Text>
+          <Text>Categoria: {item.categoria}</Text> 
+        </View>
       </View>
-      <Text>Data de Emissão: {item.emissao}</Text>
-      <Text>Data de Validade: {item.validade}</Text>
-      <Text>CPF: {item.cpf}</Text>
-      <Text>Data de Nascimento: {item.nascimento}</Text>
+      <View style={{ marginTop: 40 }}>
+        <Text>Data de Emissão: {item.emissao}</Text>
+        <Text>Data de Validade: {item.validade}</Text>
+      </View>
     </Card.Content>
     <Card.Actions>
       <IconButton icon='pencil-outline' 
@@ -64,7 +68,6 @@ const Carteira = ({ navigation, route }) => {
     </Card.Actions>
   </Card>
 ))}
-
           <Portal>
             <Dialog visible={visible} onDismiss={hideDialog}>
               <Dialog.Title>Atenção</Dialog.Title>
