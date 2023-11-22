@@ -37,7 +37,7 @@ const Ipva = () => {
 
     const valorIPVA = (valorNumerico * aliquota) / 100;
     setResultadoIPVA(`Valor do IPVA: R$ ${valorIPVA.toFixed(2)}`);
-    setErro(''); // Limpa a mensagem de erro
+    setErro(''); 
   };
 
   return (
